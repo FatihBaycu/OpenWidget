@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using OpenWidget.Services;
@@ -12,8 +13,6 @@ namespace OpenWidget.Widgets;
 
 public partial class QuickActionsWidget : UserControl
 {
-    private DateTime _lastPopupClosedTime = DateTime.MinValue;
-    private DateTime _lastNotesPopupClosedTime = DateTime.MinValue;
     private readonly DispatcherTimer _saveNotesTimer;
     private bool _isLoadingNotes = false;
 
@@ -91,30 +90,26 @@ public partial class QuickActionsWidget : UserControl
         catch { }
     }
 
+    private void BtnVolume_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (PopupVolumeMixer?.IsOpen == true)
+        {
+            PopupVolumeMixer.IsOpen = false;
+            e.Handled = true;
+        }
+    }
+
     private void BtnVolume_Click(object sender, RoutedEventArgs e)
     {
         if (PopupVolumeMixer == null) return;
 
-        if ((DateTime.UtcNow - _lastPopupClosedTime).TotalMilliseconds < 250)
+        if (PopupScratchpad != null && PopupScratchpad.IsOpen)
         {
-            return;
+            PopupScratchpad.IsOpen = false;
         }
 
-        if (PopupVolumeMixer.IsOpen)
-        {
-            PopupVolumeMixer.IsOpen = false;
-        }
-        else
-        {
-            if (PopupScratchpad != null && PopupScratchpad.IsOpen) PopupScratchpad.IsOpen = false;
-            RefreshAudioMixer();
-            PopupVolumeMixer.IsOpen = true;
-        }
-    }
-
-    private void PopupVolumeMixer_Closed(object sender, EventArgs e)
-    {
-        _lastPopupClosedTime = DateTime.UtcNow;
+        RefreshAudioMixer();
+        PopupVolumeMixer.IsOpen = true;
     }
 
     private void RefreshAudioMixer()
@@ -152,30 +147,30 @@ public partial class QuickActionsWidget : UserControl
 
     #region Scratchpad Notes
 
+    private void BtnNotes_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (PopupScratchpad?.IsOpen == true)
+        {
+            PopupScratchpad.IsOpen = false;
+            e.Handled = true;
+        }
+    }
+
     private void BtnNotes_Click(object sender, RoutedEventArgs e)
     {
         if (PopupScratchpad == null) return;
 
-        if ((DateTime.UtcNow - _lastNotesPopupClosedTime).TotalMilliseconds < 250)
+        if (PopupVolumeMixer != null && PopupVolumeMixer.IsOpen)
         {
-            return;
+            PopupVolumeMixer.IsOpen = false;
         }
 
-        if (PopupScratchpad.IsOpen)
-        {
-            PopupScratchpad.IsOpen = false;
-        }
-        else
-        {
-            if (PopupVolumeMixer != null && PopupVolumeMixer.IsOpen) PopupVolumeMixer.IsOpen = false;
-            PopupScratchpad.IsOpen = true;
-            Dispatcher.BeginInvoke(() => TxtScratchpad.Focus(), DispatcherPriority.Input);
-        }
+        PopupScratchpad.IsOpen = true;
+        Dispatcher.BeginInvoke(() => TxtScratchpad.Focus(), DispatcherPriority.Input);
     }
 
     private void PopupScratchpad_Closed(object sender, EventArgs e)
     {
-        _lastNotesPopupClosedTime = DateTime.UtcNow;
         _ = ScratchpadService.SaveAsync(TxtScratchpad.Text);
     }
 
