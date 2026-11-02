@@ -6,6 +6,11 @@ namespace OpenWidget.Tests;
 
 public class WorldCityServiceTests
 {
+    public WorldCityServiceTests()
+    {
+        WorldCityService.SetTurkishDistricts(null);
+    }
+
     [Fact]
     public void GetAll_ReturnsPopulatedCountryList()
     {
@@ -14,8 +19,8 @@ public class WorldCityServiceTests
         Assert.NotEmpty(groups);
         var turkey = groups.FirstOrDefault(g => g.CountryCode == "TR");
         Assert.NotNull(turkey);
-        Assert.True(turkey.Cities.Count >= 81);
-        Assert.Contains("Kadıköy, İstanbul", turkey.Cities);
+        Assert.Equal(81, turkey.Cities.Count);
+        Assert.Contains("İstanbul", turkey.Cities);
     }
 
     [Fact]
@@ -54,12 +59,15 @@ public class WorldCityServiceTests
     [Fact]
     public void Filter_TurkishDistrict_ReturnsMatchingEntry()
     {
-        var results = WorldCityService.Filter("Kadıköy");
+        WorldCityService.SetTurkishDistricts(["Kadıköy, İstanbul", "Sancaktepe, İstanbul", "Çekmeköy, İstanbul"]);
+
+        var results = WorldCityService.Filter("Sancaktepe");
 
         Assert.NotEmpty(results);
         var tr = results.FirstOrDefault(g => g.CountryCode == "TR");
         Assert.NotNull(tr);
-        Assert.Contains("Kadıköy, İstanbul", tr.Cities);
+        Assert.Contains("Sancaktepe, İstanbul", tr.Cities);
+        Assert.Contains("İstanbul", WorldCityService.GetAll().First(g => g.CountryCode == "TR").Cities);
     }
 
     [Fact]

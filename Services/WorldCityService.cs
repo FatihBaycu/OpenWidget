@@ -41,19 +41,7 @@ public static class WorldCityService
                 "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa",
                 "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye",
                 "Rize", "Sakarya", "Samsun", "Şanlıurfa", "Siirt", "Sinop", "Şırnak", "Sivas",
-                "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak",
-                "Kadıköy, İstanbul", "Beşiktaş, İstanbul", "Üsküdar, İstanbul", "Şişli, İstanbul",
-                "Fatih, İstanbul", "Bakırköy, İstanbul", "Maltepe, İstanbul", "Pendik, İstanbul",
-                "Ataşehir, İstanbul", "Ümraniye, İstanbul", "Sarıyer, İstanbul", "Beyoğlu, İstanbul",
-                "Kağıthane, İstanbul", "Kartal, İstanbul", "Esenyurt, İstanbul", "Başakşehir, İstanbul",
-                "Beylikdüzü, İstanbul", "Avcılar, İstanbul", "Bahçelievler, İstanbul", "Zeytinburnu, İstanbul",
-                "Çankaya, Ankara", "Keçiören, Ankara", "Yenimahalle, Ankara", "Mamak, Ankara",
-                "Etimesgut, Ankara", "Sincan, Ankara", "Altındağ, Ankara", "Pursaklar, Ankara",
-                "Konak, İzmir", "Karşıyaka, İzmir", "Bornova, İzmir", "Buca, İzmir",
-                "Çiğli, İzmir", "Bayraklı, İzmir", "Gaziemir, İzmir", "Balçova, İzmir",
-                "Nilüfer, Bursa", "Osmangazi, Bursa", "Yıldırım, Bursa",
-                "Muratpaşa, Antalya", "Konyaaltı, Antalya", "Kepez, Antalya",
-                "İzmit, Kocaeli", "Gebze, Kocaeli", "Darıca, Kocaeli"
+                "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"
             ]
         },
         new CountryCityGroup
@@ -309,20 +297,50 @@ public static class WorldCityService
         }
     ];
 
-    public static List<CountryCityGroup> GetAll() => Directory;
+    private static IReadOnlyList<string> _turkishDistricts = [];
+
+    public static void SetTurkishDistricts(IEnumerable<string>? districts)
+    {
+        _turkishDistricts = districts?
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Select(name => name.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList()
+            ?? [];
+    }
+
+    public static List<CountryCityGroup> GetAll() => GetDirectoryWithDistricts();
+
+    private static List<CountryCityGroup> GetDirectoryWithDistricts()
+    {
+        return Directory.Select(group =>
+        {
+            if (group.CountryCode != "TR" || _turkishDistricts.Count == 0)
+            {
+                return group;
+            }
+
+            var merged = group.Cities
+                .Concat(_turkishDistricts)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            return group.CloneWith(merged);
+        }).ToList();
+    }
 
     public static List<CountryCityGroup> Filter(string? query)
     {
+        var source = GetDirectoryWithDistricts();
         if (string.IsNullOrWhiteSpace(query))
         {
-            return Directory;
+            return source;
         }
 
         var cleanQuery = query.Trim();
         var culture = new CultureInfo("tr-TR");
         var result = new List<CountryCityGroup>();
 
-        foreach (var group in Directory)
+        foreach (var group in source)
         {
             var isCountryMatch = culture.CompareInfo.IndexOf(group.CountryName, cleanQuery, CompareOptions.IgnoreCase) >= 0;
             if (isCountryMatch)
