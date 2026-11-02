@@ -342,7 +342,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
                             <TextBlock x:Name="LblCity" Text="Hava Durumu Konumu" FontSize="13" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
-                            <TextBlock x:Name="LblCityHelp" Text="Ülke ve il kategorilerinden seçin veya aratın" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,3,0,0" />
+                            <TextBlock x:Name="LblCityHelp" Text="İl veya ilçe seçin; hava kartında ilçe de görünür" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,3,0,0" />
                         </StackPanel>
 
                         <!-- Custom Dropdown Trigger Button & Popup -->

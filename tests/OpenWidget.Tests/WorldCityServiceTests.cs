@@ -14,7 +14,8 @@ public class WorldCityServiceTests
         Assert.NotEmpty(groups);
         var turkey = groups.FirstOrDefault(g => g.CountryCode == "TR");
         Assert.NotNull(turkey);
-        Assert.Equal(81, turkey.Cities.Count);
+        Assert.True(turkey.Cities.Count >= 81);
+        Assert.Contains("Kadıköy, İstanbul", turkey.Cities);
     }
 
     [Fact]
@@ -48,6 +49,17 @@ public class WorldCityServiceTests
         var tr = results.FirstOrDefault(g => g.CountryCode == "TR");
         Assert.NotNull(tr);
         Assert.Contains("İstanbul", tr.Cities);
+    }
+
+    [Fact]
+    public void Filter_TurkishDistrict_ReturnsMatchingEntry()
+    {
+        var results = WorldCityService.Filter("Kadıköy");
+
+        Assert.NotEmpty(results);
+        var tr = results.FirstOrDefault(g => g.CountryCode == "TR");
+        Assert.NotNull(tr);
+        Assert.Contains("Kadıköy, İstanbul", tr.Cities);
     }
 
     [Fact]

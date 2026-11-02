@@ -41,7 +41,19 @@ public static class WorldCityService
                 "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa",
                 "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye",
                 "Rize", "Sakarya", "Samsun", "Şanlıurfa", "Siirt", "Sinop", "Şırnak", "Sivas",
-                "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"
+                "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak",
+                "Kadıköy, İstanbul", "Beşiktaş, İstanbul", "Üsküdar, İstanbul", "Şişli, İstanbul",
+                "Fatih, İstanbul", "Bakırköy, İstanbul", "Maltepe, İstanbul", "Pendik, İstanbul",
+                "Ataşehir, İstanbul", "Ümraniye, İstanbul", "Sarıyer, İstanbul", "Beyoğlu, İstanbul",
+                "Kağıthane, İstanbul", "Kartal, İstanbul", "Esenyurt, İstanbul", "Başakşehir, İstanbul",
+                "Beylikdüzü, İstanbul", "Avcılar, İstanbul", "Bahçelievler, İstanbul", "Zeytinburnu, İstanbul",
+                "Çankaya, Ankara", "Keçiören, Ankara", "Yenimahalle, Ankara", "Mamak, Ankara",
+                "Etimesgut, Ankara", "Sincan, Ankara", "Altındağ, Ankara", "Pursaklar, Ankara",
+                "Konak, İzmir", "Karşıyaka, İzmir", "Bornova, İzmir", "Buca, İzmir",
+                "Çiğli, İzmir", "Bayraklı, İzmir", "Gaziemir, İzmir", "Balçova, İzmir",
+                "Nilüfer, Bursa", "Osmangazi, Bursa", "Yıldırım, Bursa",
+                "Muratpaşa, Antalya", "Konyaaltı, Antalya", "Kepez, Antalya",
+                "İzmit, Kocaeli", "Gebze, Kocaeli", "Darıca, Kocaeli"
             ]
         },
         new CountryCityGroup
