@@ -200,7 +200,7 @@
                Placement="Top"
                VerticalOffset="-6"
                AllowsTransparency="True"
-               StaysOpen="False"
+               StaysOpen="True"
                PopupAnimation="Fade">
             <Border Width="310"
                     MaxHeight="390"
@@ -410,7 +410,7 @@
                Placement="Top"
                VerticalOffset="-6"
                AllowsTransparency="True"
-               StaysOpen="False"
+               StaysOpen="True"
                PopupAnimation="Fade"
                Closed="PopupScratchpad_Closed">
             <Border Width="310"
